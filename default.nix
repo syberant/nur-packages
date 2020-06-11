@@ -7,4 +7,8 @@ rec {
           inherit rofi-unwrapped-git;
           inherit source-rofi;
         };
+        launchers-git = pkgs.callPackage ./pkgs/adi1090x/launchers-git {
+          inherit rofi-unwrapped-git;
+          inherit source-rofi;
+        };
 }
