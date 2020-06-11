@@ -4,7 +4,7 @@
   stdenv, fetchFromGitHub, rofi-unwrapped-git, source-rofi, writeScript,
   coreutils, gawk, systemd, i3,
   theme ? "full_circle",
-  colorscheme ? "nordic",
+  colorscheme ? "nightly",
 }:
 
 # TODO: remove impurity on fonts
@@ -43,8 +43,20 @@ assert builtins.elem colorscheme [
 ];
 
 let
-  # TODO: patch this so a colorscheme can be picked.
-  repo = source-rofi;
+  repo = stdenv.mkDerivation {
+    name = "source-rofi-adi1090x";
+    src = "${source-rofi}";
+
+    patchPhase = ''
+      rm power/styles/colors.rasi
+      echo '@import "${colorscheme}.rasi"' > power/styles/colors.rasi
+    '';
+    installPhase = ''
+      mkdir $out
+      # Only copy power directory because we don't use the rest
+      cp -r power $out
+    '';
+  };
   rofi = "${rofi-unwrapped-git}/bin/rofi";
   systemctl = "${systemd}/bin/systemctl";
 in writeScript "powermenu" ''
