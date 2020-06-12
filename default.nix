@@ -8,4 +8,5 @@ rec {
         launchers-git = pkgs.callPackage ./pkgs/adi1090x/launchers-git {
           inherit rofi-unwrapped-git;
         };
+        polybar-1 = pkgs.callPackage ./pkgs/adi1090x/polybar-themes/polybar-1 {};
 }
