@@ -2,10 +2,7 @@
   callPackage
 }:
 
-let fetch = { url, sha256 }: callPackage ({ fetchurl }:
-  fetchurl { inherit url; inherit sha256; }) {};
-
-  pfetch = {
+let pfetch = {
     # Pick name from pattern "dwm-nameofpatch-versionorgithash"
     name ? builtins.elemAt (builtins.split "-" patchName) 2,
     patchName, sha256
@@ -17,19 +14,19 @@ let fetch = { url, sha256 }: callPackage ({ fetchurl }:
     }
   ) {};
 in {
-  swallow = fetch {
-    url = "https://dwm.suckless.org/patches/swallow/dwm-swallow-20200707-8d1e703.diff";
-    sha256 = "066q054rj84c5l6n17dv97ab7qw2fl315j4drawllv9idm7drnrs";
+  swallow = pfetch {
+    patchName = "dwm-swallow-20200707-8d1e703";
+    sha256 = "159xmcbprb9439gc6685crfddh660sy5d47b82bs77d6gjydik4x";
   };
 
-  namedscratchpads = fetch {
-    url = "https://dwm.suckless.org/patches/namedscratchpads/dwm-namedscratchpads-6.2.diff";
-    sha256 = "0i8fph7fs2m8ig1kabrw3yq7hm389kdqjhqkqgql16z6mpbvi453";
+  namedscratchpads = pfetch {
+    patchName = "dwm-namedscratchpads-6.2";
+    sha256 = "1h1akphlfv5sq60a703w0d05wwkq1yq1pa8970yp9hyymdm8p1h6";
   };
 
-  keymodes = fetch {
-    url = "https://dwm.suckless.org/patches/keymodes/dwm-keymodes-5.8.2.diff";
-    sha256 = "0gklgi1wd8z5sir8zjcacddcs8k43cbiqhbnxwidbjdnwp7f6h5k";
+  keymodes = pfetch {
+    patchName = "dwm-keymodes-5.8.2";
+    sha256 = "1fmwys8pyqqdc00jxw874h17f51bl0bwbaw7vlnwn7dan3c3wndh";
   };
 
   floatrules = pfetch {
