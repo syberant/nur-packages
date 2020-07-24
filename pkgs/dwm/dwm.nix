@@ -43,6 +43,13 @@ let patchCmds = {
     git commit -m "Applied patch ${file}"
   '';
 };
+callPatcher = { type ? "patch", file, ... } @ attrs: ''
+  echo
+  echo "Patching using patch '${file}' and patcher '${type}'"
+  ${patchCmds."${type}" attrs}
+'';
+patch = arg:
+  callPatcher (if (builtins.isPath arg) || (builtins.hasAttr "type" arg && arg.type == "derivation") then { file = arg; } else arg);
 in dwm.overrideAttrs (old: {
   nativeBuildInputs = [ git ];
 
@@ -56,11 +63,7 @@ in dwm.overrideAttrs (old: {
     git add -A
     git commit -m "Original dwm code, unmodified"
     git branch modified
-  '' + builtins.toString (builtins.map ({ type ? "patch", file, ...} @ attrs: ''
-    echo
-    echo "Patching using patch '${file}' and patcher '${type}'"
-    ${patchCmds."${type}" attrs}
-  '') patches) + ''
+  '' + builtins.toString (builtins.map patch patches) + ''
     git checkout modified
     git log --graph
 
