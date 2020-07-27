@@ -15,6 +15,11 @@ let pfetch = {
     } // {
       meta = with stdenv.lib; {
         description = "A patch for dwm";
+        longDescription = ''
+          A patch for dwm.
+
+          Full url: https://dwm.suckless.org/patches/${name}/${patchName}.diff
+        '';
         homepage = "https://dwm.suckless.org/patches/${name}";
         # All patches should be licensed via MIT (I think) because dwm is
         # and the website says all contributions are licensed according to the license of the original project.
