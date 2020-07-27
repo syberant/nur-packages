@@ -53,4 +53,9 @@ in {
     patchName = "dwm-cyclelayouts-20180524-6.2";
     sha256 = "1y87fgwfdgzycdbyqsmj737g89b2wf5illxpvp4pk4msn8i0w2l8";
   };
+
+  anybar = pfetch {
+    patchName = "dwm-anybar-20200721-bb2e722";
+    sha256 = "15xccai630vzv7vpnzz4mlniyswn85wb65dmyjsq3xrdjfbb0rmj";
+  };
 }
