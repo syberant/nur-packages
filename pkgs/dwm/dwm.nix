@@ -6,13 +6,13 @@
 with lib;
 
 # Overall layout of patching pipeline
-# - master contains the original unpatched code
-# - modified is the branch where all patches succesively get patched in.
+# - original contains the original unpatched code
+# - master is the branch where all patches succesively get patched in.
 # - tmp is a branch that can be used by a patcher to temporarily store a commit in and merge it later.
 
 let patchCmds = {
   git = { file, ... }: ''
-    git checkout -b tmp master
+    git checkout -b tmp original
 
     git apply --3way -C1 --exclude="config.def.h" ${file}
     git add -A
@@ -26,13 +26,13 @@ let patchCmds = {
       git add -A
       git commit -m "Resolved conflicts caused by patch ${file}"
     }
-    git checkout modified
+    git checkout master
     git merge tmp --commit || resolve_conflict
 
     git branch -d tmp
   '';
   patch = { file, fixupPatch ? null, ... }: ''
-    git checkout modified
+    git checkout master
 
     git apply -C0 --exclude="config.def.h" ${file}
     ${lib.optionalString (fixupPatch != null) ''
@@ -62,9 +62,9 @@ in dwm.overrideAttrs (old: {
 
     git add -A
     git commit -m "Original dwm code, unmodified"
-    git branch modified
+    git branch original
   '' + builtins.toString (builtins.map patch patches) + ''
-    git checkout modified
+    git checkout master
     git log --graph
 
     eval "$postPatch"
