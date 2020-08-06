@@ -76,4 +76,11 @@ in stdenv.mkDerivation {
     xcbutilxrm
     which
   ];
+
+  meta = with stdenv.lib; {
+    description = "Window switcher, run dialog and dmenu replacement";
+    homepage = "https://github.com/davatorium/rofi";
+    license = licenses.mit;
+    platforms = platforms.linux;
+  };
 }
