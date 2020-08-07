@@ -13,4 +13,6 @@ rec {
 
   dwm-patches = pkgs.callPackage ./pkgs/dwm/patches.nix { };
   dwm = pkgs.callPackage ./pkgs/dwm/dwm.nix { };
+
+  caia = pkgs.callPackage ./pkgs/caia { };
 }
