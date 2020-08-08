@@ -1,7 +1,14 @@
-{ writeScriptBin, caia-unwrapped }:
+{ symlinkJoin, makeWrapper, caia-unwrapped }:
 
-writeScriptBin "caia" ''
-  export CAIA_BIN_DIR=${caia-unwrapped}/caia/zuniq/bin
+symlinkJoin {
+  name = "caia";
+  buildInputs = [ makeWrapper ];
+  paths = [ caia-unwrapped ];
 
-  ${caia-unwrapped}/bin/caiaio -m $CAIA_BIN_DIR/manager $@
-''
+  postBuild = let bindir = "${caia-unwrapped}/caia/zuniq/bin";
+  in ''
+    wrapProgram "$out/bin/caiaio" \
+      --add-flags "-m ${bindir}/manager" \
+      --set CAIA_BIN_DIR "${bindir}"
+  '';
+}
