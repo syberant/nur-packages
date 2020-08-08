@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
     sha256 = "0xiyv4hhqfvgn166fqnyrvnlrrfhs2crkbyagd1ayvbvaxwx1yi4";
   };
 
-  patches = [ ./manager-patch.diff ];
+  patches = [ ./manager-patch.diff ./manager-patch2.diff ];
 
   # Patch the player{1,2,3} and referee binaries
   nativeBuildInputs = [ autoPatchelfHook stdenv.cc.cc.lib ];

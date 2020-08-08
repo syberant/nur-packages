@@ -15,4 +15,6 @@ rec {
   dwm = pkgs.callPackage ./pkgs/dwm/dwm.nix { };
 
   caia = pkgs.callPackage ./pkgs/caia { };
+  caia-wrapped =
+    pkgs.callPackage ./pkgs/caia/wrapper.nix { caia-unwrapped = caia; };
 }
