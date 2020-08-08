@@ -1,10 +1,10 @@
-{ stdenv, autoPatchelfHook }:
+{ stdenv, fetchzip, autoPatchelfHook }:
 
 let game = "zuniq";
 in stdenv.mkDerivation {
   name = "caia";
 
-  src = builtins.fetchTarball {
+  src = fetchzip {
     url =
       "https://www.codecup.nl/download/caia_zuniq/linux64/caia_zuniq_linux64.tar.gz";
     sha256 = "0xiyv4hhqfvgn166fqnyrvnlrrfhs2crkbyagd1ayvbvaxwx1yi4";
