@@ -1,6 +1,10 @@
 { pkgs ? import <nixpkgs> { } }:
 
 rec {
+  # Custom lib, modules and other stuff
+  modules = import ./modules/default.nix;
+
+  # Custom packages
   rofi-unwrapped-git = pkgs.callPackage ./pkgs/rofi-unwrapped-git { };
   emojipicker = pkgs.callPackage ./pkgs/emojipicker { };
   powermenu =
