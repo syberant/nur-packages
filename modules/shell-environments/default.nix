@@ -15,12 +15,30 @@ in {
     };
 
     environments = mkOption {
-      type = types.listOf types.attrs;
+      type = with types;
+        listOf (submodule {
+          options = {
+            name = mkOption { type = str; };
+            extraPackages = mkOption {
+              type = listOf package;
+              default = [ ];
+            };
+            bashrc = mkOption {
+              type = str;
+              default = "";
+            };
+            include = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+          };
+        });
       default = [ ];
       example = ''
         [{
-          name = "env-fluff";
+          name = "fluff";
           extraPackages = with pkgs; [ neofetch cmatrix sl ];
+          include = [ "base-editors" ];
         }]
       '';
       description = "The environments to create shortcuts for.";
@@ -28,7 +46,7 @@ in {
   };
 
   config = let
-    setEnv = { name, extraPackages ? [ ], include ? [ ] }:
+    setEnv = { name, extraPackages, bashrc, include }:
       makeDevEnv {
         inherit name;
         packages = cfg.base ++ extraPackages;
