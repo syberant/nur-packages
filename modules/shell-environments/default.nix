@@ -14,6 +14,35 @@ in {
       description = "Packages included in EVERY environment.";
     };
 
+    modules = mkOption {
+      type = with types;
+        attrsOf (submodule {
+          options = {
+            extraPackages = mkOption {
+              type = listOf package;
+              default = [ ];
+            };
+            bashrc = mkOption {
+              type = str;
+              default = "";
+            };
+          };
+        });
+      default = { };
+      example = ''
+        {
+          base-editors = {
+            extraPackages = with pkgs; [ vi nano ]; # Add emacs in here if you want to
+            bashrc = \'\'
+              EDITOR=vi
+              VISUAL=vi
+            \'\';
+          };
+        }
+      '';
+      description = "Composable modules able to be used in `environments`.";
+    };
+
     environments = mkOption {
       type = with types;
         listOf (submodule {
@@ -46,10 +75,14 @@ in {
   };
 
   config = let
+    getModulePackages = id: cfg.modules.${id}.extraPackages;
+    getModuleBashrc = id: cfg.modules.${id}.bashrc;
     setEnv = { name, extraPackages, bashrc, include }:
       makeDevEnv {
         inherit name;
-        packages = cfg.base ++ extraPackages;
+        packages = cfg.base ++ extraPackages
+          ++ (concatLists (map getModulePackages include));
+        bashrc = bashrc + (concatStringsSep "\n" (map getModuleBashrc include));
       };
   in { environment.systemPackages = map setEnv cfg.environments; };
 }
