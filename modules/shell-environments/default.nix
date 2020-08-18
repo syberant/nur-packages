@@ -10,7 +10,36 @@ in {
   options.programs.shell-environments = {
     base = mkOption {
       type = types.listOf types.package;
-      default = with pkgs; [ coreutils gnugrep gnused gawk ];
+      # Loosely based on https://www.archlinux.org/packages/core/any/base/
+      default = with pkgs; [
+        # Collections of utilities
+        coreutils
+        utillinux
+        procps
+        psmisc
+
+        # Gnu programs
+        findutils
+        gnugrep
+        gnused
+        gawk
+
+        # Compression libraries
+        bzip2
+        gzip
+        gnutar
+        xz
+
+        # Other
+        file
+
+        # Not based on arch linux base group
+        less
+        vim
+        which
+        sudo
+        man
+      ];
       description = "Packages included in EVERY environment.";
     };
 
