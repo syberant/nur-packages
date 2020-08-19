@@ -7,9 +7,9 @@
 # TODO: pass through HOME and TERM
 let
   rcfile = writeScript "${name}-rcfile" (''
-    IN_NIX_SHELL=pure
+    export IN_NIX_SHELL=pure
 
-    PS1='\n\[\033[1;32m\][${name}-shell:\w]\$\[\033[0m\] ';
+    export PS1='\n\[\033[1;32m\][${name}-shell:\w]\$\[\033[0m\] ';
 
   '' + bashrc);
   script = writeScript "${name}-setup" ''
