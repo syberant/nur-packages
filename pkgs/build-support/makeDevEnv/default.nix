@@ -11,6 +11,14 @@ let
 
     export PS1='\n\[\033[1;32m\][${name}-shell:\w]\$\[\033[0m\] ';
 
+    # Set temp dir
+    export TMP=/tmp/shell-environments-${name}
+    export TEMP=$TMP
+    export TMPDIR=$TMP
+    export TEMPDIR=$TMP
+    # Make sure it exists
+    mkdir -p $TMP
+
   '' + bashrc);
   script = writeScript "${name}-setup" ''
     export PATH=${lib.makeBinPath ([ bashInteractive ] ++ packages)}
