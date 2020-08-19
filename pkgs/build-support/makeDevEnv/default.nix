@@ -1,4 +1,4 @@
-{ lib, writeScript, writeScriptBin, bashInteractive }:
+{ lib, writeScript, writeScriptBin, bashInteractive, symlinkJoin, makeWrapper }:
 
 # Recommended base packages are [ coreutils gnugrep gnused gawk less ]
 { name, binName ? "env-${name}", packages, bashrc ? "" }:
@@ -20,10 +20,19 @@ let
     mkdir -p $TMP
 
   '' + bashrc);
+  # Use own rcfile even on further invocations of bash
+  wrappedBash = symlinkJoin {
+    name = "bash";
+    buildInputs = [ makeWrapper ];
+    paths = [ bashInteractive ];
+    postBuild = ''
+      wrapProgram $out/bin/bash --add-flags "--rcfile ${rcfile}"
+    '';
+  };
   script = writeScript "${name}-setup" ''
-    export PATH=${lib.makeBinPath ([ bashInteractive ] ++ packages)}
+    export PATH=${lib.makeBinPath ([ wrappedBash ] ++ packages)}
     export __ETC_PROFILE_SOURCED=1
-    ${bashInteractive}/bin/bash --rcfile ${rcfile}
+    bash
   '';
 in writeScriptBin binName ''
   env -i -S sh -c ${script}
