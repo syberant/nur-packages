@@ -26,10 +26,10 @@ in {
       example = ''
         {
           base-editors = {
-            extraPackages = with pkgs; [ vi nano ]; # Add emacs in here if you want to
+            extraPackages = with pkgs; [ vim nano ]; # Add emacs (or ed) in here if you want to
             bashrc = \'\'
-              EDITOR=vi
-              VISUAL=vi
+              export EDITOR=vi
+              export VISUAL=vi
             \'\';
           };
         }
@@ -62,6 +62,10 @@ in {
           name = "fluff";
           extraPackages = with pkgs; [ neofetch cmatrix sl ];
           include = [ "base-editors" ];
+          bashrc = \'\'
+            # You can set up your environment further here
+            alias sl="sl -F -10"
+          \'\';
         }]
       '';
       description = "The environments to create shortcuts for.";
