@@ -8,41 +8,6 @@ let
 in {
 
   options.programs.shell-environments = {
-    base = mkOption {
-      type = types.listOf types.package;
-      # Loosely based on https://www.archlinux.org/packages/core/any/base/
-      default = with pkgs; [
-        # Collections of utilities
-        coreutils
-        utillinux
-        procps
-        psmisc
-
-        # Gnu programs
-        findutils
-        gnugrep
-        gnused
-        gawk
-
-        # Compression libraries
-        bzip2
-        gzip
-        gnutar
-        xz
-
-        # Other
-        file
-
-        # Not based on arch linux base group
-        less
-        vim
-        which
-        sudo
-        man
-      ];
-      description = "Packages included in EVERY environment.";
-    };
-
     modules = mkOption {
       type = with types;
         attrsOf (submodule {
@@ -109,9 +74,48 @@ in {
     setEnv = { name, extraPackages, bashrc, include }:
       makeDevEnv {
         inherit name;
-        packages = cfg.base ++ extraPackages
+        packages = extraPackages ++ cfg.modules.base.extraPackages
           ++ (concatLists (map getModulePackages include));
-        bashrc = bashrc + (concatStringsSep "\n" (map getModuleBashrc include));
+        bashrc = bashrc + cfg.modules.base.bashrc
+          + (concatStringsSep "\n" (map getModuleBashrc include));
       };
-  in { environment.systemPackages = map setEnv cfg.environments; };
+  in {
+    programs.shell-environments.modules.base = mkDefault {
+      # Loosely based on https://www.archlinux.org/packages/core/any/base/
+      extraPackages = with pkgs; [
+        # Collections of utilities
+        coreutils
+        utillinux
+        procps
+        psmisc
+
+        # Gnu programs
+        findutils
+        gnugrep
+        gnused
+        gawk
+
+        # Compression libraries
+        bzip2
+        gzip
+        gnutar
+        xz
+
+        # Other
+        file
+
+        # Not based on arch linux base group
+        less
+        vim
+        which
+        sudo
+        man
+      ];
+      bashrc = ''
+        export PAGER=less
+      '';
+    };
+
+    environment.systemPackages = map setEnv cfg.environments;
+  };
 }
