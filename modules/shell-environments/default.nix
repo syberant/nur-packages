@@ -46,6 +46,10 @@ in {
         listOf (submodule {
           options = {
             name = mkOption { type = str; };
+            excludeBase = mkOption {
+              type = bool;
+              default = false;
+            };
             extraPackages = mkOption {
               type = listOf package;
               default = [ ];
@@ -90,11 +94,12 @@ in {
         else
           getIncludes cfg.modules.${id}.include
           (acc // { ${id} = cfg.modules.${id}; })) finished start;
-    setEnv = { name, extraPackages, bashrc, include }:
+    setEnv = { name, excludeBase, extraPackages, bashrc, include }:
       let
         # Recursively get all modules that should be included.
         # Data structure explained at `getIncludes`.
-        includes = getIncludes ([ "base" ] ++ include) { };
+        includes =
+          getIncludes (optionals (!excludeBase) [ "base" ] ++ include) { };
 
         includePackagesList =
           mapAttrsToList (id: content: content.extraPackages) includes;
