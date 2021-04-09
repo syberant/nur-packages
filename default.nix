@@ -23,6 +23,8 @@ rec {
 
   digital = pkgs.callPackage ./pkgs/digital {};
 
+  ytfzf = pkgs.callPackage ./pkgs/ytfzf {};
+
   # build-support
   makeDevEnv = pkgs.callPackage ./pkgs/build-support/makeDevEnv { };
 }
