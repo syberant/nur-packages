@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # GUI is broken on my XMonad but _JAVA_AWT_WM_NONREPARENTING=1 fixes it for me
   # This seems to be a problem with (my) XMonad so I'm not setting the variable here.
 
-  metadata = with lib; {
+  meta = with lib; {
     description = "A digital logic designer and circuit simulator.";
     homepage = "https://github.com/hneemann/Digital";
     license = licenses.gpl3;
