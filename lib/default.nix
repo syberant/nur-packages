@@ -119,4 +119,18 @@ rec {
 
       _file = path;
     };
+
+  importFileWithHandler = methods: file:
+    let
+      unsupportedType = throw
+        "Unrecognized module file type '${file}', allowed: ${attrNames methods}";
+      suffix = findFirst (a: hasSuffix a file) unsupportedType
+        (attrNames methods);
+      method = methods.${suffix} or unsupportedType;
+    in method file;
+  defaultHandlers = {
+    nix = lib.id; # NixOS module system imports Nix files itself.
+    toml = importToml;
+    json = importJson;
+  };
 }
