@@ -29,6 +29,13 @@ rec {
       recursive = true;
     };
 
+  getNixTomlJsonFiles = dir:
+    getFiles {
+      inherit dir;
+      suffixes = [ "nix" "toml" "json" ];
+      recursive = true;
+    };
+
   mapTOMLConfig = { options, config, pkgs }:
     let
       # ofPkgs :: String -> package
