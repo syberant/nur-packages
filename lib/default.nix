@@ -5,27 +5,27 @@ with builtins;
 
 rec {
   # TODO: Fix recursive
-  getFiles = { dir, suffix ? null, recursive ? false, allow_default ? true }:
+  getFiles = { dir, suffixes ? [ ], recursive ? false, allow_default ? true }:
     let
       hasDefault = d: hasAttr "default.nix" (readDir (dir + "/${d}"));
       isImportable = name: kind:
         if kind == "directory" then
           recursive || (allow_default && hasDefault name)
         else
-          suffix == null || hasSuffix suffix name;
+          lists.any (v: hasSuffix v name) suffixes;
       files = attrNames (filterAttrs isImportable (readDir dir));
     in map (f: dir + "/${f}") files;
 
   getNixFiles = dir:
     getFiles {
       inherit dir;
-      suffix = "nix";
+      suffixes = [ "nix" ];
     };
 
   getTomlFiles = dir:
     getFiles {
       inherit dir;
-      suffix = "toml";
+      suffix = [ "toml" ];
       recursive = true;
     };
 
