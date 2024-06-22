@@ -104,4 +104,19 @@ rec {
       # … while evaluating definitions from `/nix/store/1wgf129l46kvrcnac6bsfazjf08df54f-fonts.toml':
       _file = path;
     };
+
+  # Very similar to `importToml`.
+  importJson =
+    path: { pkgs, options, ... }:
+      let
+        rawSet = fromJSON (readFile path);
+        config = addErrorContext
+          "while parsing JSON file '${path}' (try fixing your syntax):" rawSet;
+        mapped = mapTOMLConfig { inherit options config pkgs; };
+      in {
+      config = addErrorContext
+      "while doing special processing on JSON file '${path}':" mapped;
+
+      _file = path;
+    };
 }
