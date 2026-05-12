@@ -1,4 +1,4 @@
-{ rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "script-directory-rust";
@@ -11,4 +11,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-e0m6Zv4AlWybTqnrzzdIEaxm18KVFcOsQ9KiBZ7drHM=";
+
+  meta = {
+    description = "Organises and runs all your (oneliner) shellscripts";
+    license = lib.licenses.eupl12;
+    maintainers = with lib.maintainers; [ syberant ];
+  };
 })
