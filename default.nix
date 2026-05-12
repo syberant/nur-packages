@@ -12,6 +12,8 @@ rec {
 
   digital = pkgs.callPackage ./pkgs/digital { };
 
+  sdr = pkgs.callPackage ./pkgs/sdr.nix { };
+
   # build-support
   makeDevEnv = pkgs.callPackage ./pkgs/build-support/makeDevEnv { };
 }
